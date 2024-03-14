@@ -224,6 +224,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                     return Container(
                                       width: 30.w,
                                       height: 30.h,
+                                      margin: EdgeInsets.all(8.r),
                                       decoration: BoxDecoration(
                                           color: Color(int.parse('FF$hexColor',
                                               radix: 16)),
