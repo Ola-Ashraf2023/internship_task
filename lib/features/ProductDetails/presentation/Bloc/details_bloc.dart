@@ -16,6 +16,8 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
   ApiManager apiManager;
   String? currentId;
   int? currentIdx = 0;
+  int? materialIdx = 0;
+  int? sizeIdx = 0;
 
   static DetailsBloc get(context) => BlocProvider.of(context);
 
@@ -40,7 +42,14 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
           emit(state.copyWith(screenStatus: ScreenStatus.failure));
         }
       } else if (event is ChangeCarouselIndex) {
+        emit(state.copyWith(screenStatus: ScreenStatus.changedCarouselIdx));
         currentIdx = event.idx;
+      } else if (event is ChangeMaterialIndex) {
+        emit(state.copyWith(screenStatus: ScreenStatus.changedMaterialIdx));
+        materialIdx = event.matIdx;
+      } else if (event is ChangeSizeIndex) {
+        emit(state.copyWith(screenStatus: ScreenStatus.changedSizeIdx));
+        sizeIdx = event.sizeIdx;
       }
     });
   }

@@ -5,6 +5,9 @@ enum ScreenStatus {
   loading,
   success,
   failure,
+  changedCarouselIdx,
+  changedMaterialIdx,
+  changedSizeIdx
 }
 
 @immutable

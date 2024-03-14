@@ -14,3 +14,15 @@ class ChangeCarouselIndex extends DetailsEvent {
 
   ChangeCarouselIndex(this.idx);
 }
+
+class ChangeMaterialIndex extends DetailsEvent {
+  int? matIdx;
+
+  ChangeMaterialIndex(this.matIdx);
+}
+
+class ChangeSizeIndex extends DetailsEvent {
+  int? sizeIdx;
+
+  ChangeSizeIndex(this.sizeIdx);
+}

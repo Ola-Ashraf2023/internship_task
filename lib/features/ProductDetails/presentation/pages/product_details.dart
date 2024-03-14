@@ -42,18 +42,21 @@ class ProductDetailsScreen extends StatelessWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  CarouselSlider(
-                    carouselController: _controller,
-                    options: CarouselOptions(
-                      onPageChanged: (index, reason) {
-                        DetailsBloc.get(context)
-                            .add(ChangeCarouselIndex(index));
-                      },
-                      height: 300.0,
-                      autoPlay: false,
-                      viewportFraction: 1,
-                    ),
-                    items: state
+                  if (state.currentProduct?.variations?[0]
+                          .productVarientImages !=
+                      null)
+                    CarouselSlider(
+                      carouselController: _controller,
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          DetailsBloc.get(context)
+                              .add(ChangeCarouselIndex(index));
+                        },
+                        height: 300.0,
+                        autoPlay: false,
+                        viewportFraction: 1,
+                      ),
+                      items: state
                         .currentProduct?.variations?[0].productVarientImages
                         ?.map((i) {
                       return Builder(
@@ -107,8 +110,6 @@ class ProductDetailsScreen extends StatelessWidget {
                                           BorderRadius.circular(20.r)),
                                 ),
                               );
-
-                              // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
                             },
                             scrollDirection: Axis.horizontal,
                           ),
@@ -283,17 +284,29 @@ class ProductDetailsScreen extends StatelessWidget {
                                     return Padding(
                                       padding: EdgeInsets.all(20.0.r),
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          DetailsBloc.get(context)
+                                              .add(ChangeSizeIndex(index));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                DetailsBloc.get(context)
+                                                            .sizeIdx ==
+                                                        index
+                                                    ? Color(0xffb8ee2e)
+                                                    : Color(0xff1d1d1f)),
                                         child: Text(
                                           "${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property == "Size", orElse: () => AvaiableProperties(property: '', values: [])).values?[index].value}",
-                                          style: TextStyle(color: Colors.black),
+                                          style: TextStyle(
+                                              color: DetailsBloc.get(context)
+                                                          .sizeIdx ==
+                                                      index
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 12),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color(0xffb8ee2e)),
                                       ),
                                     );
-
-                                    // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
                                   },
                                   scrollDirection: Axis.horizontal,
                                 ),
@@ -346,18 +359,30 @@ class ProductDetailsScreen extends StatelessWidget {
                                     return Padding(
                                       padding: EdgeInsets.all(20.0.r),
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          DetailsBloc.get(context)
+                                              .add(ChangeMaterialIndex(index));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                DetailsBloc.get(context)
+                                                            .materialIdx ==
+                                                        index
+                                                    ? Color(0xffb8ee2e)
+                                                    : Color(0xff1d1d1f)),
                                         child: Text(
                                           "${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property == "Materials", orElse: () => AvaiableProperties(property: '', values: [])).values?[index].value}" ??
                                               "",
-                                          style: TextStyle(color: Colors.black),
+                                          style: TextStyle(
+                                              color: DetailsBloc.get(context)
+                                                          .materialIdx ==
+                                                      index
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 15),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color(0xffb8ee2e)),
                                       ),
                                     );
-
-                                    // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
                                   },
                                   scrollDirection: Axis.horizontal,
                                 ),

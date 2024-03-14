@@ -51,7 +51,8 @@ class HomeScreen extends StatelessWidget {
                         );
                       },
                       child: ProductCard(
-                        productName: state.products?[index].name ?? "loading",
+                        productName:
+                            state.products?[index].name ?? "loading...",
                         price: state
                                 .products?[index].productVariations?[0].price ??
                             0,
