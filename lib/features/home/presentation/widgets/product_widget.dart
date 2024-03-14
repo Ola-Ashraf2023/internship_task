@@ -49,7 +49,7 @@ class ProductCard extends StatelessWidget {
                 Expanded(
                     child: Text(
                   productName,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
                 )),
               ],
             ),

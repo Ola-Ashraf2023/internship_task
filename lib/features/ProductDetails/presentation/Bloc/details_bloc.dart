@@ -15,6 +15,7 @@ part 'details_state.dart';
 class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
   ApiManager apiManager;
   String? currentId;
+  int? currentIdx = 0;
 
   static DetailsBloc get(context) => BlocProvider.of(context);
 
@@ -38,6 +39,8 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
           print(e.toString());
           emit(state.copyWith(screenStatus: ScreenStatus.failure));
         }
+      } else if (event is ChangeCarouselIndex) {
+        currentIdx = event.idx;
       }
     });
   }

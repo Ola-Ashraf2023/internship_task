@@ -8,3 +8,9 @@ class GetSpecificProductEvent extends DetailsEvent {
 
   GetSpecificProductEvent(this.id);
 }
+
+class ChangeCarouselIndex extends DetailsEvent {
+  int? idx;
+
+  ChangeCarouselIndex(this.idx);
+}

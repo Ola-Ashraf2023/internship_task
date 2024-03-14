@@ -43,11 +43,6 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        //var myBloc = BlocProvider.of<HomeBloc>(context);
-                        print("id is ${state.products?[index].id.toString()}");
-                        //HomeBloc.get(context).add(GetSpecificProductEvent(
-                        //    state.products?[index].id.toString() ?? ""));
-                        // print("id is ${state.products?[index].id.toString()}");
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -13,15 +13,15 @@ class ProductDetailsScreen extends StatelessWidget {
 
   ProductDetailsScreen(this.id);
 
+  CarouselController _controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
           DetailsBloc(ApiManager())..add(GetSpecificProductEvent(id)),
       child: BlocConsumer<DetailsBloc, DetailsState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -43,8 +43,16 @@ class ProductDetailsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CarouselSlider(
+                    carouselController: _controller,
                     options: CarouselOptions(
-                        height: 200.0, autoPlay: true, viewportFraction: 1),
+                      onPageChanged: (index, reason) {
+                        DetailsBloc.get(context)
+                            .add(ChangeCarouselIndex(index));
+                      },
+                      height: 300.0,
+                      autoPlay: false,
+                      viewportFraction: 1,
+                    ),
                     items: state
                         .currentProduct?.variations?[0].productVarientImages
                         ?.map((i) {
@@ -69,16 +77,57 @@ class ProductDetailsScreen extends StatelessWidget {
                     }).toList(),
                   ),
                   Row(
+                    children: [
+                      Container(
+                        height: 100.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.currentProduct?.variations?[0]
+                                    .productVarientImages?.length ??
+                                0,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  _controller.animateToPage(index);
+                                },
+                                child: Container(
+                                  height: 30.h,
+                                  width: 90.w,
+                                  padding: EdgeInsets.all(18.r),
+                                  margin: EdgeInsets.all(10.r),
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              "${state.currentProduct?.variations?[0].productVarientImages?[index].imagePath}")),
+                                      borderRadius:
+                                          BorderRadius.circular(20.r)),
+                                ),
+                              );
+
+                              // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
+                            },
+                            scrollDirection: Axis.horizontal,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: EdgeInsets.all(8.0.r),
                             child: Text(
                               state.currentProduct?.name ?? "",
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 25),
+                                  TextStyle(color: Colors.white, fontSize: 20),
                             ),
                           ),
                           Padding(
@@ -86,7 +135,7 @@ class ProductDetailsScreen extends StatelessWidget {
                             child: Text(
                               "EGP ${state.currentProduct?.variations?[0].price ?? 0}",
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 25),
+                                  TextStyle(color: Colors.white, fontSize: 20),
                             ),
                           ),
                           //Text(state.currentProduct.productVariations)
@@ -94,16 +143,20 @@ class ProductDetailsScreen extends StatelessWidget {
                       ),
                       Column(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(50.r),
-                            child: CachedNetworkImage(
-                              height: 100.h,
-                              imageUrl: state.currentProduct?.brandImage ?? "",
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0.r),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50.r),
+                              child: CachedNetworkImage(
+                                height: 100.h,
+                                imageUrl:
+                                    state.currentProduct?.brandImage ?? "",
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Center(child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
                             ),
                           ),
                           Padding(
@@ -227,14 +280,17 @@ class ProductDetailsScreen extends StatelessWidget {
                                           ?.length ??
                                       0,
                                   itemBuilder: (context, index) {
-                                    return ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        "${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property == "Size", orElse: () => AvaiableProperties(property: '', values: [])).values?[index].value}",
-                                        style: TextStyle(color: Colors.black),
+                                    return Padding(
+                                      padding: EdgeInsets.all(20.0.r),
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property == "Size", orElse: () => AvaiableProperties(property: '', values: [])).values?[index].value}",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Color(0xffb8ee2e)),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color(0xffb8ee2e)),
                                     );
 
                                     // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
@@ -287,15 +343,18 @@ class ProductDetailsScreen extends StatelessWidget {
                                           ?.length ??
                                       0,
                                   itemBuilder: (context, index) {
-                                    return ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        "${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property == "Materials", orElse: () => AvaiableProperties(property: '', values: [])).values?[index].value}" ??
-                                            "",
-                                        style: TextStyle(color: Colors.black),
+                                    return Padding(
+                                      padding: EdgeInsets.all(20.0.r),
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property == "Materials", orElse: () => AvaiableProperties(property: '', values: [])).values?[index].value}" ??
+                                              "",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Color(0xffb8ee2e)),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color(0xffb8ee2e)),
                                     );
 
                                     // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
