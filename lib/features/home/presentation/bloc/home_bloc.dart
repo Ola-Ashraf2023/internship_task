@@ -15,9 +15,6 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ApiManager apiManager;
-
-  // String? currentId;
-
   static HomeBloc get(context) => BlocProvider.of(context);
 
   HomeBloc(this.apiManager) : super(HomeInitial()) {
