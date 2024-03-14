@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc/bloc.dart';
-import 'package:internship_task/features/home/data/models/ProductModel.dart';
+import 'package:internship_task/features/ProductDetails/domain/entities/singleProductEntity.dart';
 import 'package:meta/meta.dart';
 
 import '../../../../core/api/api_manager.dart';
@@ -17,16 +15,19 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ApiManager apiManager;
+
+  // String? currentId;
+
   static HomeBloc get(context) => BlocProvider.of(context);
+
   HomeBloc(this.apiManager) : super(HomeInitial()) {
     on<HomeEvent>((event, emit) async {
       if (event is GetProductEvent) {
         emit(state.copyWith(screenStatus: ScreenStatus.loading));
         HomeRemoteDataSource homeRemoteDataSource =
-        HomeRemoteDataSourceImpl(apiManager);
+            HomeRemoteDataSourceImpl(apiManager);
         HomeRepo homeRepo = HomeRepoImpl(homeRemoteDataSource);
-        GetProductsUseCase getProductsUseCase =
-        GetProductsUseCase(homeRepo);
+        GetProductsUseCase getProductsUseCase = GetProductsUseCase(homeRepo);
         try {
           var res = await getProductsUseCase.call();
           emit(state.copyWith(

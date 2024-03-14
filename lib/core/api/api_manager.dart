@@ -1,5 +1,7 @@
-import '../utils/constants.dart';
 import 'package:dio/dio.dart';
+
+import '../utils/constants.dart';
+
 class ApiManager {
   late Dio dio;
 
@@ -14,8 +16,8 @@ class ApiManager {
 
   Future<Response> postData(
       {required String endPoint,
-        required Map<String, dynamic> body,
-        String? token}) {
+      required Map<String, dynamic> body,
+      String? token}) {
     return dio.post(Constants.BASEURL + endPoint, data: body);
   }
 }

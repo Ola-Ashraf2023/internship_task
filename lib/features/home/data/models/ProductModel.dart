@@ -24,7 +24,8 @@ class BrandsModel extends Brands {
     this.slashContractPath,
     this.brandRating,
     this.daysLimitToReturn,
-    this.planId,});
+    this.planId,
+  });
 
   BrandsModel.fromJson(dynamic json) {
     id = json['id'];
@@ -51,25 +52,28 @@ class BrandsModel extends Brands {
     daysLimitToReturn = json['days_limit_to_return'];
     planId = json['planId'];
   }
+
   int? brandStatusId;
-  dynamic brandStoreAddressId;
+  int? brandStoreAddressId;
   int? brandCategoryId;
-  dynamic deletedAt;
+  String? deletedAt;
   String? createdAt;
   String? updatedAt;
   int? brandSellerId;
-  dynamic brandId;
-  dynamic slashContractPath;
+  int? brandId;
+  String? slashContractPath;
   int? brandRating;
   int? daysLimitToReturn;
-  dynamic planId;
+  int? planId;
 }
+
 class ProductStatusLookups {
   ProductStatusLookups({
     this.id,
     this.name,
     this.createdAt,
-    this.updatedAt,});
+    this.updatedAt,
+  });
 
   ProductStatusLookups.fromJson(dynamic json) {
     id = json['id'];
@@ -77,6 +81,7 @@ class ProductStatusLookups {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
+
   int? id;
   String? name;
   String? createdAt;
@@ -89,7 +94,8 @@ class ProductVarientImagesModel extends ProductVarientImages {
     super.imagePath,
     super.productVarientId,
     this.createdAt,
-    this.updatedAt,});
+    this.updatedAt,
+  });
 
   ProductVarientImagesModel.fromJson(dynamic json) {
     id = json['id'];
@@ -98,6 +104,7 @@ class ProductVarientImagesModel extends ProductVarientImages {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
+
   String? createdAt;
   String? updatedAt;
 
@@ -110,7 +117,6 @@ class ProductVarientImagesModel extends ProductVarientImages {
     map['updatedAt'] = updatedAt;
     return map;
   }
-
 }
 
 class ProductVariationsModel extends ProductVariations {
@@ -125,9 +131,9 @@ class ProductVariationsModel extends ProductVariations {
     this.createdAt,
     this.updatedAt,
     this.productVariationStatusId,
-    this.acceptedBy,
     this.productStatusLookups,
-    super.productVarientImages,});
+    super.productVarientImages,
+  });
 
   ProductVariationsModel.fromJson(dynamic json) {
     id = json['id'];
@@ -140,8 +146,9 @@ class ProductVariationsModel extends ProductVariations {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     productVariationStatusId = json['product_variation_status_id'];
-    acceptedBy = json['accepted_by'];
-    productStatusLookups = json['ProductStatusLookups'] != null ? ProductStatusLookups.fromJson(json['ProductStatusLookups']) : null;
+    productStatusLookups = json['ProductStatusLookups'] != null
+        ? ProductStatusLookups.fromJson(json['ProductStatusLookups'])
+        : null;
     if (json['ProductVarientImages'] != null) {
       productVarientImages = [];
       json['ProductVarientImages'].forEach((v) {
@@ -150,12 +157,11 @@ class ProductVariationsModel extends ProductVariations {
     }
   }
 
-  dynamic warehouseId;
-  dynamic deletedAt;
+  int? warehouseId;
+  String? deletedAt;
   String? createdAt;
   String? updatedAt;
   int? productVariationStatusId;
-  dynamic acceptedBy;
   ProductStatusLookups? productStatusLookups;
 }
 
@@ -167,7 +173,8 @@ class SubCategories {
     this.createdAt,
     this.updatedAt,
     this.categoryId,
-    this.imagePath,});
+    this.imagePath,
+  });
 
   SubCategories.fromJson(dynamic json) {
     id = json['id'];
@@ -178,15 +185,16 @@ class SubCategories {
     categoryId = json['category_id'];
     imagePath = json['image_path'];
   }
+
   int? id;
   String? name;
-  dynamic deletedAt;
+  String? deletedAt;
   String? createdAt;
   String? updatedAt;
   int? categoryId;
   String? imagePath;
-
 }
+
 class ModelData extends Data {
   ModelData({
     super.id,
@@ -195,17 +203,18 @@ class ModelData extends Data {
     super.description,
     this.subCategoryId,
     super.brandId,
-    this.bostaSizeId,
-    this.createdAt,
-    this.updatedAt,
-    this.deletedAt,
-    super.productRating,
-    this.estimatedDaysPreparing,
-    super.brands,
-    super.productVariations,
-    this.subCategories,
-    this.sizeChart,
-    this.notApprovedVariants,});
+      this.bostaSizeId,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      super.productRating,
+      this.estimatedDaysPreparing,
+      super.brands,
+      super.productVariations,
+      this.subCategories,
+      this.sizeChart,
+      this.notApprovedVariants,
+      super.avaiableProperties});
 
   ModelData.fromJson(dynamic json) {
     id = json['id'];
@@ -220,41 +229,53 @@ class ModelData extends Data {
     deletedAt = json['deletedAt'];
     productRating = json['product_rating'];
     estimatedDaysPreparing = json['estimated_days_preparing'];
-    brands = json['Brands'] != null ? BrandsModel.fromJson(json['Brands']) : null;
+    brands =
+        json['Brands'] != null ? BrandsModel.fromJson(json['Brands']) : null;
     if (json['ProductVariations'] != null) {
       productVariations = [];
       json['ProductVariations'].forEach((v) {
         productVariations?.add(ProductVariationsModel.fromJson(v));
       });
     }
-    subCategories = json['SubCategories'] != null ? SubCategories.fromJson(json['SubCategories']) : null;
+    subCategories = json['SubCategories'] != null
+        ? SubCategories.fromJson(json['SubCategories'])
+        : null;
     sizeChart = json['SizeChart'];
     notApprovedVariants = json['notApprovedVariants'];
+    if (json['avaiableProperties'] != null) {
+      avaiableProperties = [];
+      json['avaiableProperties'].forEach((v) {
+        avaiableProperties?.add(AvaiableProperties.fromJson(v));
+      });
+    }
   }
+
   String? type;
   int? subCategoryId;
-  dynamic bostaSizeId;
+  int? bostaSizeId;
   String? createdAt;
   String? updatedAt;
-  dynamic deletedAt;
+  String? deletedAt;
   int? estimatedDaysPreparing;
   SubCategories? subCategories;
-  dynamic sizeChart;
+  int? sizeChart;
   int? notApprovedVariants;
-
-
 }
+
 class ProductModel extends ProductEntity {
   ProductModel({
     this.statusCode,
     this.message,
     this.pagination,
-    super.data,});
+    super.data,
+  });
 
   ProductModel.fromJson(dynamic json) {
     statusCode = json['statusCode'];
     message = json['message'];
-    pagination = json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? Pagination.fromJson(json['pagination'])
+        : null;
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
@@ -262,22 +283,20 @@ class ProductModel extends ProductEntity {
       });
     }
   }
+
   int? statusCode;
   String? message;
   Pagination? pagination;
-
-
-
 }
 
 class Pagination {
   Pagination({
-    this.pages,});
+    this.pages,
+  });
 
   Pagination.fromJson(dynamic json) {
     pages = json['pages'];
   }
-  dynamic pages;
 
-
+  int? pages;
 }

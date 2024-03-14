@@ -55,14 +55,15 @@ class ProductVariations {
     this.isDefault,
     this.productVarientImages,
   });
+
   int? id;
   int? productId;
   num? price;
   int? quantity;
   bool? isDefault;
   List<ProductVarientImages>? productVarientImages;
-
 }
+
 class Data {
   Data({
     this.id,
@@ -72,6 +73,7 @@ class Data {
     this.productRating,
     this.brands,
     this.productVariations,
+    this.avaiableProperties,
   });
 
   int? id;
@@ -81,4 +83,40 @@ class Data {
   num? productRating;
   Brands? brands;
   List<ProductVariations>? productVariations;
+  List<AvaiableProperties>? avaiableProperties;
+}
+
+class AvaiableProperties {
+  AvaiableProperties({
+    this.property,
+    this.values,
+  });
+
+  String? property;
+  List<Values>? values;
+
+  AvaiableProperties.fromJson(dynamic json) {
+    property = json['property'];
+    if (json['values'] != null) {
+      values = [];
+      json['values'].forEach((v) {
+        values?.add(Values.fromJson(v));
+      });
+    }
+  }
+}
+
+class Values {
+  Values({
+    this.value,
+    this.id,
+  });
+
+  String? value;
+  int? id;
+
+  Values.fromJson(dynamic json) {
+    value = json['value'];
+    id = json['id'];
+  }
 }

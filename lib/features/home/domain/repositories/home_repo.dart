@@ -1,5 +1,5 @@
 import '../entities/ProductEntity.dart';
 
-abstract class HomeRepo{
+abstract class HomeRepo {
   Future<ProductEntity> getProducts();
 }
