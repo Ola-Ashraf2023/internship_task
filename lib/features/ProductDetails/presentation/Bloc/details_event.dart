@@ -26,3 +26,15 @@ class ChangeSizeIndex extends DetailsEvent {
 
   ChangeSizeIndex(this.sizeIdx);
 }
+
+class ChangeColorIndex extends DetailsEvent {
+  int? colorIdx;
+
+  ChangeColorIndex(this.colorIdx);
+}
+
+class ChangeVariationIdx extends DetailsEvent {
+  int? variationIdx;
+
+  ChangeVariationIdx(this.variationIdx);
+}

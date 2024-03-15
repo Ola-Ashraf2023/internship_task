@@ -18,6 +18,8 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
   int? currentIdx = 0;
   int? materialIdx = 0;
   int? sizeIdx = 0;
+  int? variationIdx = 0;
+  int? colorIdx = 0;
 
   static DetailsBloc get(context) => BlocProvider.of(context);
 
@@ -50,6 +52,12 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
       } else if (event is ChangeSizeIndex) {
         emit(state.copyWith(screenStatus: ScreenStatus.changedSizeIdx));
         sizeIdx = event.sizeIdx;
+      } else if (event is ChangeVariationIdx) {
+        emit(state.copyWith(screenStatus: ScreenStatus.changedVariationIdx));
+        variationIdx = event.variationIdx;
+      } else if (event is ChangeColorIndex) {
+        emit(state.copyWith(screenStatus: ScreenStatus.changedColorIdx));
+        colorIdx = event.colorIdx;
       }
     });
   }

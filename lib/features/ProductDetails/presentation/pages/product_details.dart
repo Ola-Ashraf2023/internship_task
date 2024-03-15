@@ -27,7 +27,7 @@ class ProductDetailsScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.black,
               centerTitle: true,
-              title: Text(
+              title: const Text(
                 "Product Details",
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -42,7 +42,10 @@ class ProductDetailsScreen extends StatelessWidget {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (state.currentProduct?.variations?[0]
+                  if (state
+                          .currentProduct
+                          ?.variations?[
+                              DetailsBloc.get(context).variationIdx ?? 0]
                           .productVarientImages !=
                       null)
                     CarouselSlider(
@@ -57,28 +60,31 @@ class ProductDetailsScreen extends StatelessWidget {
                         viewportFraction: 1,
                       ),
                       items: state
-                        .currentProduct?.variations?[0].productVarientImages
-                        ?.map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: CachedNetworkImage(
-                              height: 180.h,
-                              width: 237.w,
-                              imageUrl: i.imagePath ?? "",
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
+                          .currentProduct
+                          ?.variations?[
+                              DetailsBloc.get(context).variationIdx ?? 0]
+                          .productVarientImages
+                          ?.map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: CachedNetworkImage(
+                                height: 180.h,
+                                width: 237.w,
+                                imageUrl: i.imagePath ?? "",
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Center(child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    ),
                   Row(
                     children: [
                       Container(
@@ -88,8 +94,13 @@ class ProductDetailsScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: state.currentProduct?.variations?[0]
-                                    .productVarientImages?.length ??
+                            itemCount: state
+                                    .currentProduct
+                                    ?.variations?[
+                                        DetailsBloc.get(context).variationIdx ??
+                                            0]
+                                    .productVarientImages
+                                    ?.length ??
                                 0,
                             itemBuilder: (context, index) {
                               return InkWell(
@@ -105,7 +116,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(
-                                              "${state.currentProduct?.variations?[0].productVarientImages?[index].imagePath}")),
+                                              "${state.currentProduct?.variations?[DetailsBloc.get(context).variationIdx ?? 0].productVarientImages?[index].imagePath}")),
                                       borderRadius:
                                           BorderRadius.circular(20.r)),
                                 ),
@@ -134,12 +145,11 @@ class ProductDetailsScreen extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.all(8.0.r),
                             child: Text(
-                              "EGP ${state.currentProduct?.variations?[0].price ?? 0}",
+                              "EGP ${state.currentProduct?.variations?[DetailsBloc.get(context).variationIdx ?? 0].price ?? 0}",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                           ),
-                          //Text(state.currentProduct.productVariations)
                         ],
                       ),
                       Column(
@@ -221,19 +231,46 @@ class ProductDetailsScreen extends StatelessWidget {
                                         .value;
                                     hexColor = hexColor?.replaceAll("#", "");
                                     hexColor ??= '#000000';
-                                    return Container(
-                                      width: 30.w,
-                                      height: 30.h,
-                                      margin: EdgeInsets.all(8.r),
-                                      decoration: BoxDecoration(
-                                          color: Color(int.parse('FF$hexColor',
-                                              radix: 16)),
-                                          border:
-                                              Border.all(color: Colors.white),
-                                          shape: BoxShape.circle),
-                                    );
+                                    return InkWell(
+                                      onTap: () {
+                                        DetailsBloc.get(context)
+                                            .add(ChangeColorIndex(index));
+                                        //Get ID of chosen variation
+                                        var tempId1 = state
+                                            .currentProduct?.avaiableProperties
+                                            ?.firstWhere(
+                                                (element) =>
+                                                    element.property == "Color",
+                                                orElse: () =>
+                                                    AvaiableProperties(
+                                                        property: '',
+                                                        values: []))
+                                            .values?[index]
+                                            .id;
 
-                                    // Text("${state.currentProduct?.avaiableProperties?.firstWhere((element) => element.property=="Color").values?[index].value}",style: TextStyle(color: Colors.white),);
+                                        DetailsBloc.get(context).add(
+                                            ChangeVariationIdx(state
+                                                .currentProduct?.variations
+                                                ?.indexWhere((variation) =>
+                                                    variation.id == tempId1)));
+                                      },
+                                      child: Container(
+                                        width: 30.w,
+                                        height: 30.h,
+                                        margin: EdgeInsets.all(8.r),
+                                        decoration: BoxDecoration(
+                                            color: Color(int.parse(
+                                                'FF$hexColor',
+                                                radix: 16)),
+                                            border: Border.all(
+                                                color: DetailsBloc.get(context)
+                                                            .colorIdx ==
+                                                        index
+                                                    ? Color(0xffb8ee2e)
+                                                    : Colors.white),
+                                            shape: BoxShape.circle),
+                                      ),
+                                    );
                                   },
                                   scrollDirection: Axis.horizontal,
                                 ),
@@ -288,6 +325,27 @@ class ProductDetailsScreen extends StatelessWidget {
                                         onPressed: () {
                                           DetailsBloc.get(context)
                                               .add(ChangeSizeIndex(index));
+                                          //Get ID of chosen variation
+                                          var tempId2 = state.currentProduct
+                                              ?.avaiableProperties
+                                              ?.firstWhere(
+                                                  (element) =>
+                                                      element.property ==
+                                                      "Size",
+                                                  orElse: () =>
+                                                      AvaiableProperties(
+                                                          property: '',
+                                                          values: []))
+                                              .values?[index]
+                                              .id;
+
+                                          //;
+                                          DetailsBloc.get(context).add(
+                                              ChangeVariationIdx(state
+                                                  .currentProduct?.variations
+                                                  ?.indexWhere((variation) =>
+                                                      variation.id ==
+                                                      tempId2)));
                                         },
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor:
@@ -363,6 +421,26 @@ class ProductDetailsScreen extends StatelessWidget {
                                         onPressed: () {
                                           DetailsBloc.get(context)
                                               .add(ChangeMaterialIndex(index));
+                                          //Get ID of chosen variation
+                                          var tempId = state.currentProduct
+                                              ?.avaiableProperties
+                                              ?.firstWhere(
+                                                  (element) =>
+                                                      element.property ==
+                                                      "Materials",
+                                                  orElse: () =>
+                                                      AvaiableProperties(
+                                                          property: '',
+                                                          values: []))
+                                              .values?[index]
+                                              .id;
+
+                                          //;
+                                          DetailsBloc.get(context).add(
+                                              ChangeVariationIdx(state
+                                                  .currentProduct?.variations
+                                                  ?.indexWhere((variation) =>
+                                                      variation.id == tempId)));
                                         },
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor:
@@ -394,6 +472,31 @@ class ProductDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0.r),
+                        child: Text(
+                          "Description",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0.r),
+                          child: Text(
+                            state.currentProduct?.description ?? "",
+                            style: TextStyle(color: Colors.white),
+                            softWrap: true,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
